@@ -1,0 +1,25 @@
+#!/usr/bin/env sh
+
+yabai -m config layout bsp &&
+#sudo yabai --load-sa &&
+
+# global settings
+#yabai -m window_origin_display default && 
+
+# general space layout
+yabai -m config top_padding    45 && 
+yabai -m config bottom_padding 10 &&
+yabai -m config left_padding   10 &&
+yabai -m config right_padding  10 &&
+yabai -m config window_gap     10 &&
+
+yabai -m config window_topmost          on &&
+
+# Exceptions
+yabai -m rule --add app="^System Preferences$" manage=off &&
+yabai -m rule --add app="^Finder$" manage=off && 
+yabai -m rule --add app="^Messenger$" manage=off && 
+yabai -m rule --add app="^Mail$" manage=off && 
+yabai -m rule --add app="^Zoom$" manage=off && 
+yabai -m rule --add app="^Zoom.us$" manage=off && 
+echo "yabai configuration loaded ..."

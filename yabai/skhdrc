@@ -1,0 +1,14 @@
+
+# prevents skhd from monitoring events for listed processes.
+
+.blacklist [
+    "terminal"
+    "iterm2"
+    "google chrome"
+    "firefox"
+]
+
+lshift  - h : yabai -m window --focus west
+lshift - j : yabai -m window --focus south 
+lshift - k : yabai -m window --focus north
+lshift - l : yabai -m window --focus east

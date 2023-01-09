@@ -1,0 +1,26 @@
+PS1='%n>> %B%/%b $ '
+# GREP AUTO-OPTIONS 
+my_grep_options=(--colour=auto)
+alias grep='grep $my_grep_options'
+
+# FOLDER SHORTCUTS
+alias comp="cd ~/desktop/coding/university/COMP"
+alias university="cd ~/desktop/coding/university"
+alias projects="cd ~/desktop/coding/Projects"
+
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/Users/brianli/opt/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/Users/brianli/opt/anaconda3/etc/profile.d/conda.sh" ]; then
+        . "/Users/brianli/opt/anaconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/Users/brianli/opt/anaconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+

@@ -12,7 +12,7 @@ map("n", "<Leader>m", ":Mason<CR>", { noremap = true })
 map("n", "<Leader>tt", ":NvimTreeToggle<CR>", { silent = true })
 map("n", "<Leader>tr", ":NvimTreeRefresh<CR>", { silent = true })
 map("n", "<Leader>t", ":TroubleToggle<CR>", { noremap = true })
-
+map("n", "<Leader>L", ":Lazy<CR>", { noremap = true })
 
 -- Buffer navigation
 map("n", "<Leader>h", ":bn<CR>", { noremap = true }) -- move to right buffer

@@ -1,8 +1,8 @@
--- [[ vim functions ]]
+-- vim autocommands
+
 local api = vim.api
 local bufnr = api.nvim_get_current_buf()
 local Makefile = api.nvim_create_augroup('makefile', { clear = true })
-api.nvim_clear_autocmds({ buffer = bufnr, group = Makefile })
 api.nvim_create_autocmd({ "BufEnter", "BufNew" }, {
     group = Makefile,
     desc = "Remove tab expansion during makefile editing",
@@ -12,13 +12,12 @@ api.nvim_create_autocmd({ "BufEnter", "BufNew" }, {
     end
 })
 
+-- use 2 spaced tabs for the specified files
 local changeshift = api.nvim_create_augroup('customshift', { clear = true })
-api.nvim_clear_autocmds({ buffer = bufnr, group = changeshift })
 api.nvim_create_autocmd("FileType", {
     desc = "custom tab expansion",
     pattern = { 'zsh', 'sh', 'c', 'html', 'cpp' },
     callback = function()
-        -- change local buffer options
         vim.bo.shiftwidth = 2
         vim.bo.softtabstop = 2
         vim.bo.tabstop = 2
@@ -26,20 +25,19 @@ api.nvim_create_autocmd("FileType", {
     group = changeshift
 })
 
--- Auto format write buffers
+-- Auto format specified buffers on write
 local format_sync_group = api.nvim_create_augroup('autoformat', { clear = true })
-api.nvim_clear_autocmds({ buffer = bufnr, group = format_sync_group })
 api.nvim_create_autocmd("BufWritePre", {
-    pattern = { "*.py", "*.c", '*.rs', '*.cpp', '*.html', '*.css' },
+    -- removed lua and html formatting
+    pattern = { "*.py", "*.c", '*.rs', '*.cpp', '*.css' },
     callback = function()
         vim.lsp.buf.format(nil, 200)
     end,
     group = format_sync_group,
 })
 
-
+-- display diagnostics as hovers
 local diagnosticshover = api.nvim_create_augroup('diagnosticshover', { clear = true })
-api.nvim_clear_autocmds({ buffer = bufnr, group = diagnosticshover })
 api.nvim_create_autocmd("CursorHold", {
     buffer = bufnr,
     callback = function()
@@ -53,7 +51,6 @@ api.nvim_create_autocmd("CursorHold", {
             title = 'test',
             pad_top = 0.1,
             pad_bottom = 0.2,
-            -- prefix = '  ',
             scope = 'cursor',
         }
         vim.diagnostic.open_float(nil, opts)

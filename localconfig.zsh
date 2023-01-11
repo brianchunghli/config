@@ -28,16 +28,17 @@ if [ "$(whoami)" = 'brianli' ]; then
 
     # folder aliases
     alias SCRIPTS="cd ~/.scripts"
-    alias CODING="cd ~/desktop/.coding"
-    alias DOCS="cd ~/Documents/"
     alias PROGRAMMING="cd ~/Documents/programming/"
+    alias DOCS="cd ~/Documents/"
     alias CSE="cd ~/cse/courses"
     alias CSELOCAL="cd ~/unsw/cse"
     alias LOCALCOMP="cd ~/desktop/.coding/university/COMP"
+
+    # configurations
     alias yabai_config="nvim ~/.config/yabai/yabairc"
     alias sbar_config="nvim ~/.config/sketchybar/sketchybarrc"
     alias luaConfig="nvim ~/.config/nvim/lua/brianli-mac/"
-    alias luaConfig1="nvim ~/.config/nvim/after/plugin/"
+    alias luaPlugins="nvim ~/.config/nvim/plugin/"
     alias zshConfig="nvim ~/.config/localconfig.zsh"
     alias utils="cd ~/.scripts/progs/util/"
 
@@ -62,5 +63,4 @@ if [ "$(whoami)" = 'brianli' ]; then
 
     export LSCOLORS='fxxxxxxxGxxxxxabagacxx'
     conda activate general
-
 fi;

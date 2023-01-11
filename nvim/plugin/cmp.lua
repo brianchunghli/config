@@ -1,7 +1,7 @@
-local lspkind = require('lspkind')
-lspkind.init()
 local ls = require("luasnip")
 local cmp = require('cmp')
+local lspkind = require('lspkind')
+lspkind.init()
 cmp.setup({
     preselect = cmp.PreselectMode.None,
     snippet = {
@@ -50,3 +50,4 @@ cmp.setup({
         ghost_text = true,
     },
 })
+require("luasnip.loaders.from_vscode").lazy_load()

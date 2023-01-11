@@ -12,4 +12,4 @@ vim.cmd "sign define DiagnosticSignWarn text=● texthl=DiagnosticSignWarn"
 vim.cmd "sign define DiagnosticSignInfo text=● texthl=DiagnosticSignInfo"
 vim.cmd "sign define DiagnosticSignHint text=● texthl=DiagnosticSignHint"
 
-require ('brianli-mac')
+require('brianli-mac')

@@ -1,4 +1,4 @@
-local lspconfig = require("lspconfig")
+local _, lspconfig = pcall(require, "lspconfig")
 local lsp_capabilities = lspconfig.util.default_config
 lsp_capabilities.capabilities = vim.tbl_deep_extend(
     'force',

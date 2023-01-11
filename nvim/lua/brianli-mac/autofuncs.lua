@@ -37,17 +37,6 @@ api.nvim_create_autocmd("BufWritePre", {
     group = format_sync_group,
 })
 
-local autoclose = api.nvim_create_augroup('autoclose', { clear = true })
-api.nvim_clear_autocmds({ buffer = bufnr, group = autoclose })
-local trouble_ok, _ = pcall(require, 'trouble')
-if trouble_ok then
-    api.nvim_create_autocmd({ "QuitPre", "ExitPre", "BufLeave" }, {
-        callback = function()
-            vim.cmd('TroubleClose')
-        end,
-        group = autoclose,
-    })
-end
 
 local diagnosticshover = api.nvim_create_augroup('diagnosticshover', { clear = true })
 api.nvim_clear_autocmds({ buffer = bufnr, group = diagnosticshover })

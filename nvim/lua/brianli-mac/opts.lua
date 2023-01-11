@@ -1,8 +1,11 @@
 --[[ vars.lua ]]
 local opt = vim.o                       -- setting vim options with lua               
 -- [[ vimscript commands ]]  
-vim.g.catppuccin_flavour = 'macchiato'  -- str: setting the sub-colorscheme
-vim.cmd "colorscheme catppuccin"        -- str: setting the colorscheme 
+local status, _ = pcall(require, 'catpuccin')
+if status then
+	vim.g.catppuccin_flavour = 'macchiato'  -- str: setting the sub-colorscheme
+	vim.cmd "colorscheme catppuccin"        -- str: setting the colorscheme 
+end
 vim.g.highlights_insert_mode_enabled =  false
 
 -- menuone: popup even when there's only one match

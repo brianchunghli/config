@@ -1,94 +1,115 @@
 -- [[ CONTAINS ALL PLUGINS ]]
-local fn = vim.fn
 -- /users/brianli/.config/nvim
-local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
-if fn.empty(fn.glob(install_path)) > 0 then
-    Packer_bootstrap = fn.system({ 'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim',
-        install_path })
-    vim.cmd [[packadd packer.nvim]]
-else
-    vim.cmd([[
-  augroup packer_user_config
-    autocmd!
-    autocmd BufWritePost plugins.lua source <afile> | PackerCompile
-  augroup end]])
-    return require("packer").startup(function(use)
-
-        -- IMPORTANT
-        use { "wbthomason/packer.nvim" }
-        use { "lewis6991/gitsigns.nvim" }
-
-        --   COLORSCHEMES
-        use { "catppuccin/nvim", as = "catppuccin" }
-        use { "Mofiqul/dracula.nvim", as = "dracula" }
-        use { "drewtempelmeyer/palenight.vim", as = "pale" }
-        use { "rebelot/kanagawa.nvim", as = "kanagawa" }
-        use { 'bluz71/vim-nightfly-colors', as = "nightfly" }
-
-        if not vim.g.vscode then
-            use { "goolord/alpha-nvim" }
-            use { "lewis6991/impatient.nvim" }
-            -- FILES
-            use { "nvim-telescope/telescope.nvim",
-                tag = "0.1.0",
-                requires = "nvim-lua/plenary.nvim",
-            }
-            use { "kyazdani42/nvim-tree.lua",
-                requires = "kyazdani42/nvim-web-devicons"
-            }
-            use { 'ThePrimeagen/vim-be-good' }
-            --  LSP && AUTOCOMPLETION
-            -- set up rust analyser with extra features
-            use { "neovim/nvim-lspconfig" }
-            use { "jose-elias-alvarez/null-ls.nvim" }
-            -- currently broken
-            -- use { "simrat39/rust-tools.nvim" }
-            -- using a fix fork of rust-tools
-            use { "kdarkhan/rust-tools.nvim" }
-            use { "p00f/clangd_extensions.nvim" }
-            use { "williamboman/mason.nvim" }
-            -- integrates mason and lsp
-            use { "williamboman/mason-lspconfig.nvim" }
-            use("nvim-treesitter/nvim-treesitter", { run = ':TSUpdate' })
-            use { 'akinsho/bufferline.nvim', tag = "v3.*",
-                requires = 'nvim-tree/nvim-web-devicons'
-            }
-            use { "nvim-lualine/lualine.nvim",
-                requires = { "kyazdani42/nvim-web-devicons", opt = true }
-            }
-            use { "rcarriga/nvim-notify" }
-            use { "j-hui/fidget.nvim",}
-            use { "folke/trouble.nvim",
-                requires = "kyazdani42/nvim-web-devicons",
-            }
-            use { "folke/todo-comments.nvim",
-                requires = "nvim-lua/plenary.nvim",
-            }
-            -- provides hover definition functionality
-            use { "lewis6991/hover.nvim", }
-            -- [[ snipper]]
-            use { "L3MON4D3/LuaSnip" }
-            use { "hrsh7th/nvim-cmp",
-                requires = {
-                    -- LSP
-                    "hrsh7th/cmp-buffer",
-                    "hrsh7th/cmp-path",
-                    "hrsh7th/cmp-nvim-lsp",
-                    "hrsh7th/cmp-nvim-lua",
-                    "amarakon/nvim-cmp-buffer-lines",
-                    "rafamadriz/friendly-snippets",
-                    -- ICONS
-                    "onsails/lspkind-nvim",
-                }
-            }
-            use { 'saadparwaiz1/cmp_luasnip' }
-            use { 'nvim-lua/popup.nvim' }
-            use { "lukas-reineke/indent-blankline.nvim", }
-        end
-        -- Automatically set up your configuration after cloning packer.nvim
-        -- Put this at the end after all plugins
-        if Packer_bootstrap then
-            require('packer').sync()
-        end
-    end)
+local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
+if not vim.loop.fs_stat(lazypath) then
+    vim.fn.system({
+        'git',
+        'clone',
+        '--filter=blob:none',
+        'https://github.com/folke/lazy.nvim.git',
+        '--branch=stable', -- latest stable release
+        lazypath,
+    })
 end
+vim.opt.rtp:prepend(lazypath)
+local config = {
+    -- IMPORTANT
+    'lewis6991/gitsigns.nvim',
+    --   COLORSCHEMES
+    { 'catppuccin/nvim',
+        name = 'catppuccin',
+        config = function()
+            require('catppuccin').setup()
+            vim.g.catppuccin_flavour = 'macchiato'
+            vim.cmd('colorscheme catppuccin')
+        end,
+        priority = 900
+    },
+    { 'Mofiqul/dracula.nvim', name = 'dracula' },
+    { 'drewtempelmeyer/palenight.vim', name = 'pale' },
+    { 'rebelot/kanagawa.nvim', name = 'kanagawa' },
+    { 'bluz71/vim-nightfly-colors', name = 'nightfly' },
+}
+if not vim.g.vscode then
+    function TableConcat(t1, t2)
+        for i = 1, #t2 do
+            t1[#t1 + 1] = t2[i]
+        end
+        return t1
+    end
+
+    config = TableConcat(config, {
+        { 'goolord/alpha-nvim',
+            config = function()
+                require 'alpha'.setup(require 'alpha.themes.startify'.config)
+            end
+        },
+        -- FILES
+        { 'nvim-telescope/telescope.nvim',
+            version = '0.1.0',
+            dependencies = 'nvim-lua/plenary.nvim',
+        },
+        { 'kyazdani42/nvim-tree.lua',
+            dependencies = 'kyazdani42/nvim-web-devicons',
+            config = function()
+                require('nvim-tree').setup()
+            end
+        },
+        { 'ThePrimeagen/vim-be-good' },
+        --  LSP && AUTOCOMPLETION
+        -- set up rust analyser with extra features
+
+        { 'neovim/nvim-lspconfig' },
+        { 'jose-elias-alvarez/null-ls.nvim' },
+        -- currently broken
+        -- use { 'simrat39/rust-tools.nvim' }
+        -- using a fix fork of rust-tools
+        { 'kdarkhan/rust-tools.nvim' },
+        { 'p00f/clangd_extensions.nvim' },
+        { 'williamboman/mason.nvim',
+            config = function()
+                require('mason').setup()
+            end
+        },
+        -- integrates mason and lsp
+        { 'williamboman/mason-lspconfig.nvim' },
+        { 'nvim-treesitter/nvim-treesitter',
+            priority = 1000,
+        },
+        { 'akinsho/bufferline.nvim', version = 'v3.*',
+            dependencies = 'kyazdani42/nvim-web-devicons',
+        },
+        { 'nvim-lualine/lualine.nvim',
+            dependencies = { 'kyazdani42/nvim-web-devicons', lazy = true }
+        },
+        { 'rcarriga/nvim-notify' },
+        { 'j-hui/fidget.nvim', },
+        { 'folke/trouble.nvim',
+            dependencies = 'kyazdani42/nvim-web-devicons',
+        },
+        { 'folke/todo-comments.nvim',
+            dependencies = 'nvim-lua/plenary.nvim',
+        },
+        -- provides hover definition functionality
+        { 'lewis6991/hover.nvim', },
+        -- [[ snipper]]
+        { 'L3MON4D3/LuaSnip' },
+        { 'hrsh7th/nvim-cmp',
+            dependencies = {
+                -- LSP
+                'hrsh7th/cmp-buffer',
+                'hrsh7th/cmp-path',
+                'hrsh7th/cmp-nvim-lsp',
+                'hrsh7th/cmp-nvim-lua',
+                'amarakon/nvim-cmp-buffer-lines',
+                'rafamadriz/friendly-snippets',
+                -- ICONS
+                'onsails/lspkind-nvim',
+            }
+        },
+        { 'saadparwaiz1/cmp_luasnip' },
+        { 'nvim-lua/popup.nvim' },
+        { 'lukas-reineke/indent-blankline.nvim', }
+    })
+end
+require('lazy').setup(config)
